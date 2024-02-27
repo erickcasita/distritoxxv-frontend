@@ -1,5 +1,5 @@
 <script setup>
-    import FormAddAffiliations from '@/components/FormAddAffiliations.vue';
+    import SearchAffiliations from '@/components/SearchAffiliations.vue';
     import Sidebar from '@/components/Sidebar.vue';
     import Navbar from '@/components/Navbar.vue';
 </script>
@@ -7,6 +7,6 @@
  <Navbar />
 <div class="flex overflow-hidden bg-white rounded-lg">
     <Sidebar/>
-    <FormAddAffiliations/>
+    <SearchAffiliations/>
 </div>
 </template>
