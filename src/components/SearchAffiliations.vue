@@ -2,8 +2,9 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import ModalVieAffiliations from '@/components/ModalViewAffiliations.vue';
-  
+import Spinner from '@/components/Spinner.vue'; 
 const modal = ref(false);
+const spinner = ref(true);
 const affiliationbyid = ref({
     name: "",
     lastname: "",
@@ -38,7 +39,8 @@ const  getAfffiliationsById = async(id)=>{
             affiliationbyid.value.secction_vote = response.data.details.secction_vote,
             affiliationbyid.value.phone_number = response.data.details.phone_number,
             affiliationbyid.value.address_home = response.data.details.address_home,
-            console.log("<<Sucess get affiliations by id>>", response.data.response, "status", response.status
+            console.log("<<Sucess get affiliations by id>>", response.data.response, "status", response.status,
+            
             )))
         .catch((error) => (console.log(error.message)))
 
@@ -49,7 +51,8 @@ const getAffiliations = async () => {
     await axios.get('https://distritoxxv-api.onrender.com/api/v1/affiliations')
         .then((response) => (
             affiliations.value = response.data,
-            console.log("<<Sucess get affiliations>>", response.data.response, "status", response.status
+            console.log("<<Sucess get affiliations>>", response.data.response, "status", response.status,
+            spinner.value = false
             )))
         .catch((error) => (console.log(error.message)))
 };
@@ -68,6 +71,7 @@ getAffiliations();
                         xxv.</p>
                     <div class="rounded-lg border border-gray-200">
                         <div class="overflow-x-auto rounded-t-lg">
+                           
                             <table class="min-w-full divide-y-2 divide-gray-200 bg-white ">
                                 <thead class="ltr:text-left rtl:text-right">
                                     <tr>
@@ -79,9 +83,10 @@ getAffiliations();
 
                                     </tr>
                                 </thead>
-
+                                
                                 <tbody class="divide-y divide-gray-200 ltr:text-left rtl:text-right">
-                                    <tr v-for="affiliation in affiliations.data">
+                                    <Spinner v-if="spinner"/>
+                                    <tr v-else v-for="affiliation in affiliations.data">
                                         <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{{ affiliation.name
                                         }}</td>
                                         <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ affiliation.town }}</td>
