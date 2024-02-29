@@ -4,6 +4,9 @@ import { ref } from 'vue'
 import ModalVieAffiliations from '@/components/ModalViewAffiliations.vue';
   
 const modal = ref(false);
+const cerrarModal = (value) =>{
+      modal.value = false;
+  }
 const affiliations = ref([]);
 
 const getAffiliations = async () => {
@@ -19,7 +22,7 @@ getAffiliations();
 
 </script>
 <template>
-     <ModalVieAffiliations v-show="modal"></ModalVieAffiliations>
+     <ModalVieAffiliations :modal = "modal" @cerrarModal="cerrarModal"></ModalVieAffiliations>
     <div class="w-full max-w-screen-xl mx-auto px-4">
         <div class="bg-wite-300 dark:bg-gray-800 transition-colors duration-300">
             <div class="container mx-auto p-4">
