@@ -1,5 +1,5 @@
 <script setup>
-
+  import Spinner from  '@/components/Spinner.vue';
   defineProps ({
     modal:  Boolean,
     name: String,
@@ -10,7 +10,8 @@
     postcode: Number,
     secction_vote: Number,
     phone_number: Number,
-    address_home: String
+    address_home: String,
+    spinner: Boolean
   })
   const emit  = defineEmits(['cerrarModal'])
 
@@ -56,7 +57,9 @@
           <div class="sm:flex sm:items-start">
             
             <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-              <h2 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Detalles de la Afiliación: {{name}} {{lastname}}</h2>
+              <Spinner v-if="spinner === true"/>
+              <div v-else>
+              <h2  class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Detalles de la Afiliación: {{name}} {{lastname}}</h2>
               <div class="mt-2">
                 <p class="text-sm text-gray-500">Nombre: {{name}} {{lastname}} </p>
                 <p class="text-sm text-gray-500">Cargo: {{rol}}</p>
@@ -67,6 +70,7 @@
                 <p class="text-sm text-gray-500">Teléfono: {{ phone_number }} </p>
                 <p class="text-sm text-gray-500">Dirección: {{ address_home }}  </p>
               </div>
+             </div>
             </div>
           </div>
         </div>

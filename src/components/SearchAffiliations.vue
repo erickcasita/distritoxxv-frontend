@@ -16,10 +16,14 @@ const affiliationbyid = ref({
     phone_number: null,
     address_home: ""
 });
+
+const spinnermodal = ref(true);
 const cerrarModal = (value) =>{
       
       modal.value = false;
+      
       affiliationbyid.value = {}
+      
   }
 const affiliations = ref([]);
 
@@ -28,6 +32,7 @@ const affiliations = ref([]);
 const  getAfffiliationsById = async(id)=>{
     console.log(id);
     modal.value = true;
+    spinnermodal.value = true;
     await axios.get('https://distritoxxv-api.onrender.com/api/v1/affiliations/'+id)
         .then((response) => (
             affiliationbyid.value.name =  response.data.details.name,
@@ -39,6 +44,7 @@ const  getAfffiliationsById = async(id)=>{
             affiliationbyid.value.secction_vote = response.data.details.secction_vote,
             affiliationbyid.value.phone_number = response.data.details.phone_number,
             affiliationbyid.value.address_home = response.data.details.address_home,
+            spinnermodal.value = false,
             console.log("<<Sucess get affiliations by id>>", response.data.response, "status", response.status,
             
             )))
@@ -51,8 +57,9 @@ const getAffiliations = async () => {
     await axios.get('https://distritoxxv-api.onrender.com/api/v1/affiliations')
         .then((response) => (
             affiliations.value = response.data,
+            spinner.value = false,
             console.log("<<Sucess get affiliations>>", response.data.response, "status", response.status,
-            spinner.value = false
+            
             )))
         .catch((error) => (console.log(error.message)))
 };
@@ -76,6 +83,8 @@ getAffiliations();
                                 <thead class="ltr:text-left rtl:text-right">
                                     <tr>
                                         <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Nombre</th>
+                                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Municipio</th>
+
                                         <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Comunidad /
                                             Colonia</th>
                                         <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Cargo</th>
@@ -85,10 +94,11 @@ getAffiliations();
                                 </thead>
                                 
                                 <tbody class="divide-y divide-gray-200 ltr:text-left rtl:text-right">
-                                    <Spinner v-if="spinner"/>
+                                    <Spinner v-if ="spinner == true"/>
                                     <tr v-else v-for="affiliation in affiliations.data">
                                         <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{{ affiliation.name
-                                        }}</td>
+                                        }} {{ affiliation.last_name }}</td>
+                                        <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ affiliation.entity }}</td>
                                         <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ affiliation.town }}</td>
                                         <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ affiliation.rol }}</td>
                                         <td><span class="inline-flex overflow-hidden rounded-md border bg-white shadow-sm">
@@ -113,5 +123,5 @@ getAffiliations();
 
         </div>
     </div>
-    <ModalVieAffiliations  :modal = "modal"  :="affiliationbyid" @cerrarModal="cerrarModal"></ModalVieAffiliations>
+    <ModalVieAffiliations  :modal = "modal"  :="affiliationbyid" :spinner = "spinnermodal" @cerrarModal="cerrarModal"></ModalVieAffiliations>
 </template>
