@@ -6,6 +6,7 @@ import Spinner from '@/components/Spinner.vue';
 import EditModalFormAffiliations   from '@/components/EditModalFormAffiliations.vue';
 
 const modal = ref(false);
+const modalEditAffiliations = ref(false);
 const spinner = ref(true);
 const affiliationbyid = ref({
     name: "",
@@ -27,6 +28,35 @@ const cerrarModal = (value) => {
     affiliationbyid.value = {}
 
 }
+const cerrarModalEditAffiliations = (value) => {
+
+    modalEditAffiliations.value = false;
+
+
+
+}
+
+const editAffiliations = async (id) =>{
+    modalEditAffiliations.value = true; 
+    await axios.get('https://distritoxxv-api.onrender.com/api/v1/affiliations/' + id)
+        .then((response) => (
+            affiliationbyid.value.name = response.data.details.name,
+            affiliationbyid.value.lastname = response.data.details.last_name,
+            affiliationbyid.value.rol = response.data.details.rol,
+            affiliationbyid.value.entity = response.data.details.entity,
+            affiliationbyid.value.town = response.data.details.town,
+            affiliationbyid.value.postcode = response.data.details.postcode,
+            affiliationbyid.value.secction_vote = response.data.details.secction_vote,
+            affiliationbyid.value.phone_number = response.data.details.phone_number,
+            affiliationbyid.value.address_home = response.data.details.address_home,
+            spinnermodal.value = false,
+            console.log("<<Sucess get affiliations by id>>", response.data.response, "status", response.status,
+
+            )))
+        .catch((error) => (console.log(error.message)))
+}
+
+
 const affiliations = ref([]);
 let affiliationscopy = [];
 let affiliationxpage = ref();
@@ -93,7 +123,6 @@ getAffiliations();
 </script>
 
 <template>
-    <EditModalFormAffiliations/>
     <div class="w-full max-w-screen-xl mx-auto px-4">
         <div class="bg-wite-300 dark:bg-gray-800 transition-colors duration-300">
             <div class="container mx-auto p-4">
@@ -167,6 +196,7 @@ getAffiliations();
                                             <span
                                                 class="inline-flex overflow-hidden rounded-md border bg-white shadow-sm">
                                                 <button
+                                                    @click="editAffiliations(affiliation._id)"
                                                     class="inline-block border-e p-3 text-gray-700 hover:bg-gray-50 focus:relative"
                                                     title="Editar afiliación">
                                                     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -194,4 +224,6 @@ getAffiliations();
     </div>
     <ModalVieAffiliations :modal="modal" :="affiliationbyid" :spinner="spinnermodal" @cerrarModal="cerrarModal">
     </ModalVieAffiliations>
+    <EditModalFormAffiliations :modal="modalEditAffiliations" :="affiliationbyid" @cerrarModalEditAffiliations="cerrarModalEditAffiliations"/>
+
 </template>
