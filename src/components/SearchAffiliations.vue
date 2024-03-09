@@ -21,6 +21,7 @@ const affiliationbyid = ref({
 });
 
 const spinnermodal = ref(true);
+const spinnermodaledit = ref(true);
 const cerrarModal = (value) => {
 
     modal.value = false;
@@ -38,6 +39,7 @@ const cerrarModalEditAffiliations = (value) => {
 
 const editAffiliations = async (id) =>{
     modalEditAffiliations.value = true; 
+    spinnermodaledit.value = true;
     await axios.get('https://distritoxxv-api.onrender.com/api/v1/affiliations/' + id)
         .then((response) => (
             affiliationbyid.value.name = response.data.details.name,
@@ -49,7 +51,7 @@ const editAffiliations = async (id) =>{
             affiliationbyid.value.secction_vote = response.data.details.secction_vote,
             affiliationbyid.value.phone_number = response.data.details.phone_number,
             affiliationbyid.value.address_home = response.data.details.address_home,
-            spinnermodal.value = false,
+            spinnermodaledit.value = false,
             console.log("<<Sucess get affiliations by id>>", response.data.response, "status", response.status,
 
             )))
@@ -224,6 +226,6 @@ getAffiliations();
     </div>
     <ModalVieAffiliations :modal="modal" :="affiliationbyid" :spinner="spinnermodal" @cerrarModal="cerrarModal">
     </ModalVieAffiliations>
-    <EditModalFormAffiliations :modal="modalEditAffiliations" :="affiliationbyid" @cerrarModalEditAffiliations="cerrarModalEditAffiliations"/>
+    <EditModalFormAffiliations :modal="modalEditAffiliations" :="affiliationbyid"  :spinner="spinnermodaledit"   @cerrarModalEditAffiliations="cerrarModalEditAffiliations"/>
 
 </template>
