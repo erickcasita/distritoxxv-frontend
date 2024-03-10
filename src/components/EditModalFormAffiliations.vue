@@ -1,5 +1,7 @@
 <script setup>
 import Spinner from '@/components/Spinner.vue';
+import { ref } from 'vue'
+import axios from 'axios'
 defineProps ({
     modal:  Boolean,
     name: String,
@@ -13,12 +15,41 @@ defineProps ({
     address_home: String,
     spinner: Boolean
   })
-
+  const roles = ref([]);
+  const entities = ref([]);
+  const towns = ref([]);
+  const entityname = ref('');
   const emit  = defineEmits(['cerrarModalEditAffiliations'])
 
   function btnModalEditAffiliationsClose() {
     emit('cerrarModalEditAffiliations',false)
   }
+  const getRoles = async () => {
+    await axios.get('https://distritoxxv-api.onrender.com/api/v1/roles')
+        .then((response) => (
+            roles.value = response.data,
+            console.log("<<Sucess get roles>>", response.data.response, "status", response.status
+            )))
+        .catch((error) => (console.log(error.message)))
+};
+const getEntities = async () => {
+    await axios.get('https://distritoxxv-api.onrender.com/api/v1/entities')
+        .then((response) => (
+            entities.value = response.data,
+            console.log("<<Sucess get entities>>", response.data.response, "status", response.status
+            )))
+        .catch((error) => (console.log(error.message)))
+};
+const getTowns = async () => {
+    await axios.get('https://distritoxxv-api.onrender.com/api/v1/towns/' + entity.value)
+        .then((response) => (
+            towns.value = response.data,
+            console.log("<<Sucess get towns>>", response.data.response, "status", response.status
+            )))
+        .catch((error) => (console.log(error.message)))
+};
+getEntities();
+getRoles();
 </script>
 
 <template>
@@ -47,20 +78,17 @@ defineProps ({
                     id="rol"
                     class="mb-8 text-gray-600 focus:outline-none focus:border focus:border-red-900 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border">
                     <option class="text-base" :value="rol">{{rol}}</option>
-                    <option class="text-base" value="armandina">Armandina</option>
-                    <option class="text-base" value="san juana">San juana</option>
-                    <option class="text-base" value="tianguis">Tianguis</option>
+                    <option v-for="rol in roles.data" :value="rol.name">{{ rol.name }}</option>
                 </select> 
 
                 <label for="entity"
                     class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Municipio</label>
                 <select
+                    @change="getTowns"
                     id="entity"
                     class="mb-8 text-gray-600 focus:outline-none focus:border focus:border-red-900 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border">
                     <option class="text-base" :value="entity">{{entity}}</option>
-                    <option class="text-base" value="armandina">Armandina</option>
-                    <option class="text-base" value="san juana">San juana</option>
-                    <option class="text-base" value="tianguis">Tianguis</option>
+                    <option v-for="entitie in entities.data" :value="entitie.name">{{ entitie.name }}</option>
                 </select> 
                 <label for="town"
                     class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Colonia o Comunidad</label>
@@ -68,9 +96,7 @@ defineProps ({
                     id="town"
                     class="mb-8 text-gray-600 focus:outline-none focus:border focus:border-red-900 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border">
                     <option class="text-base" :value="town">{{town}}</option>
-                    <option class="text-base" value="armandina">Armandina</option>
-                    <option class="text-base" value="san juana">San juana</option>
-                    <option class="text-base" value="tianguis">Tianguis</option>
+                    <option v-for="town in towns.data" :value="town.name">{{ town.name }}</option>
                 </select> 
                 <label for="postcode" class="text-gray-800 text-sm font-bold leading-tight tracking-normal">Código Postal</label>
                 <input id="postcode"
