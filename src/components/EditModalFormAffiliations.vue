@@ -13,12 +13,13 @@ defineProps ({
     secction_vote: Number,
     phone_number: Number,
     address_home: String,
-    spinner: Boolean
+    spinner: Boolean,
+    updateAffiliations: Function
   })
   const roles = ref([]);
   const entities = ref([]);
   const towns = ref([]);
-  const entityname = ref('');
+  const localname = ref('');
   const emit  = defineEmits(['cerrarModalEditAffiliations'])
 
   function btnModalEditAffiliationsClose() {
@@ -41,6 +42,7 @@ const getEntities = async () => {
         .catch((error) => (console.log(error.message)))
 };
 const getTowns = async () => {
+    
     await axios.get('https://distritoxxv-api.onrender.com/api/v1/towns/' + entity.value)
         .then((response) => (
             towns.value = response.data,
@@ -48,6 +50,11 @@ const getTowns = async () => {
             )))
         .catch((error) => (console.log(error.message)))
 };
+
+const sendUpdate =  ()=>{
+    
+    console.log($props.name);
+}
 getEntities();
 getRoles();
 </script>
@@ -56,7 +63,7 @@ getRoles();
     
     <div class="py-12 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0" id="modal" v-show="modal">
         
-        <form role="alert" class="container mx-auto w-11/12 md:w-2/3 max-w-lg">
+        <form role="alert" class="container mx-auto w-11/12 md:w-2/3 max-w-lg" @submit.prevent="sendUpdate">
            
             <div class="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
                 <Spinner v-if="spinner === true"/>

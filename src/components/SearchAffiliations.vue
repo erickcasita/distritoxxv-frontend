@@ -58,6 +58,9 @@ const editAffiliations = async (id) =>{
         .catch((error) => (console.log(error.message)))
 }
 
+const updateAffiliations = () =>{
+    console.log(affiliationbyid.value.name);
+}
 
 const affiliations = ref([]);
 let affiliationscopy = [];
@@ -226,6 +229,6 @@ getAffiliations();
     </div>
     <ModalVieAffiliations :modal="modal" :="affiliationbyid" :spinner="spinnermodal" @cerrarModal="cerrarModal">
     </ModalVieAffiliations>
-    <EditModalFormAffiliations :modal="modalEditAffiliations" :="affiliationbyid"  :spinner="spinnermodaledit"   @cerrarModalEditAffiliations="cerrarModalEditAffiliations"/>
+    <EditModalFormAffiliations :modal="modalEditAffiliations" :="affiliationbyid"  :spinner="spinnermodaledit"  :updateAffiliations="updateAffiliations"  @cerrarModalEditAffiliations="cerrarModalEditAffiliations"/>
 
 </template>
